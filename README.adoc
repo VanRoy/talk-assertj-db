@@ -1,0 +1,7 @@
+= Talk AssertJ-DB
+
+Validez les opérations en bases de données de votre application avec style
+
+=== Slides
+
+https://vanroy.github.io/talk-assertj-db/

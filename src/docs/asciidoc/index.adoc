@@ -1,0 +1,214 @@
+= AssertJ-DB : Validez les opérations en bases de données de votre application avec style
+Julien Roy @ Bankin'
+2020-02-24
+:example-caption!:
+:imagesdir: images
+:sourcedir: ../../main
+:testdir: ../../test
+
+== Pourquoi c’est nécessaire
+
+
+=== Tests
+
+[source,java]
+.Test de repository
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryTest.java[tags=saveUser,indent=0]
+----
+=== Tests
+
+[source,sql]
+.Contenu réel de la base
+----
+select * from user;
+----
+[source]
+----
+------------ USER ------------
+ID | NAME   | EMAIL
+1  |        | homer@simpson.net
+----
+
+=== Tests
+
+[source,java]
+.Test de repository
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryTest.java[tags=saveUserWithFind,indent=0]
+----
+
+=== Tests
+
+[source,sql]
+.Contenu réel de la base
+----
+select * from user;
+----
+[source]
+----
+------------ USER ------------
+ID | NAME   | EMAIL
+1  |        | lisa@simpson.net
+----
+
+=== Tests
+
+[source,java]
+.Code source de l'entité
+----
+include::{sourcedir}/java/com/github/vanroy/assertjdb/UserEntity.java[tag=class]
+----
+
+== Solutions existantes
+
+=== DbUnit
+
+[source,java]
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryDBUnitTest.java[tag=saveUser,indent=0]
+----
+
+[source,xml]
+----
+include::{testdir}/resources/com/github/vanroy/assertjdb/expected-users.xml[]
+----
+
+=== DbUnit
+
+==== Points faibles
+
+- Manque de souplesse dans les assertions
+- Difficulté de composition
+- XML :'(
+
+== Présentation d'AssertJ-DB
+
+=== Présentation
+
+[%step]
+- Créée par Régis Pouiller en 2014
+- Basé sur AssertJ ( Joel Costigliola )
+- Assertions "fluent"
+- Compatible Java >= 7
+
+=== Concepts : Connexion
+
+- Source
+- DataSource
+
+=== Concepts : Navigation
+
+- Table / Request / Changes
+- Row / Column / Value
+
+=== Concepts : Assertions
+
+- isNull / isText / isNumber / ...
+- isEqualTo / isNotEqualTo / isBefore / isCloseTo / ...
+- is / isNot / has / ...
+
+=== Examples
+
+[source,java]
+.Validation d'une table
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryAssertJDBTest.java[tags=assertThatTable,indent=0]
+----
+
+=== Examples
+
+[source,java]
+.Validation d'une requête
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryAssertJDBTest.java[tags=assertThatRequest,indent=0]
+----
+
+=== Examples
+
+[source,java]
+.Validation des changements
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryAssertJDBTest.java[tags=assertThatChanges,indent=0]
+----
+
+=== Extra
+
+[source,java]
+.DateTime
+----
+DateValue dateValue = DateValue.of(2020, 01, 01);
+
+assertThat(table)
+    .hasNumberOfRows(1)
+    .row(0)
+    .value("registration_date").isAfter(dateValue);
+----
+
+=== Extra
+
+[source,java]
+.Letter Case management
+----
+LetterCase tlc = LetterCase.getLetterCase(
+        CaseConversions.NO,
+        CaseComparisons.IGNORE
+);
+LetterCase clc = LetterCase.getLetterCase(
+        CaseConversions.UPPER,
+        CaseComparisons.IGNORE
+);
+DataSource ds = new DataSourceWithLetterCase(dataSource, tlc, clc);
+----
+
+=== Extra
+
+[source,java]
+.Ouput
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryAssertJDBTest.java[tag=outputConsole,indent=0]
+----
+[source]
+----
+[USERS table]
+|----------|--------------|------------------|
+| ID       | NAME         | EMAIL            |
+| (NUMBER) | (TEXT)       | (TEXT)           |
+|----------|--------------|------------------|
+| 1        | Lisa Simpson | lisa@simpson.net |
+|--------------------------------------------|
+----
+
+== Nouveautés de la version 1.3
+
+=== Conditions
+
+[source,java]
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryAssertJDBTest.java[tag=conditions,indent=0]
+----
+
+=== SoftAssertions
+
+[source,java]
+----
+include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryAssertJDBTest.java[tag=softAssertions,indent=0]
+----
+
+== Évolutions prévues pour la 2.0
+
+- Upgrade to Java 8
+- Upgrade AssertJ Core 3
+- Assertions du schema
+- Ce que vous voulez !
+
+== Bonus
+
+=== DbSetup
+
+- Créée par Ninja Squad
+- Peuple la base de données
+- Java "fluent" API
+- DSL Kotlin
+
+== Questions
