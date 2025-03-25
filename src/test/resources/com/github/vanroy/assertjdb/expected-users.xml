@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <User id="1" name="Homer Simpson" email="homer@simpson.net"/>
+  <User id="1" name="Homer Simpson" email="homer@simpson.net"/>
 </dataset>

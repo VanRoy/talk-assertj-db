@@ -1,37 +1,42 @@
 package com.github.vanroy.assertjdb;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Transient;
-import java.time.LocalDateTime;
-
 // tag::class[]
 @Entity(name = "user")
-@Data
 // end::class[]
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 // tag::class[]
 public class UserEntity {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-    @Transient
-    private String name;
-    private String email;
-    // end::class[]
-    private LocalDateTime registrationDate;
+  @Id
+  @GeneratedValue(generator = "user_seq")
+  // end::class[]
+  @SequenceGenerator(name = "user_seq", allocationSize = 1)
+  // tag::class[]
+  private Long id;
+  @Transient
+  private String name;
+  private String email;
+  // end::class[]
+  @Transient
+  private String birthdate;
+  // tag::class[]
 
-    public UserEntity(String name, String email) {
-        this.name = name;
-        this.email = email;
-    }
-    // tag::class[]
+  public UserEntity(String name, String email) {
+    this.name = name;
+    this.email = email;
+  }
+  // end::class[]
+  public UserEntity(String name, String email, String birthdate) {
+    this(name, email);
+    this.birthdate = birthdate;
+  }
+  // tag::class[]
 }
 // end::class[]
