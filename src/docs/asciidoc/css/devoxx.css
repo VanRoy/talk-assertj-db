@@ -75,7 +75,7 @@ body.title {
     background-repeat: no-repeat;
     position: absolute;
     left: -250px;
-    width: 50%;
+    width: 60%;
     height: 100%;
     z-index: -1;
   }
