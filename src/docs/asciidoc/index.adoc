@@ -230,3 +230,7 @@ include::{testdir}/java/com/github/vanroy/assertjdb/UserRepositoryAssertJDBTest.
 - DSL Kotlin
 
 == Questions
+
+Feedback
+
+image::feedback.svg[Feedback, 200,200]
